@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  password String
+  name     String?
+  status   Int       @default(1)
+  rol      Int       @default(2)
+  profiles Profile[]
+  proxies  Proxy[]
+  websites Website[]
+
+  @@map("user")
+}
+
+model Proxy {
+  id       Int       @id @default(autoincrement())
+  ip       String
+  port     String
+  username String
+  password String
+  user_id  Int
+  user     User      @relation(fields: [user_id], references: [id])
+  profiles Profile[]
+
+  @@map("proxy")
+}
+
+model Profile {
+  id                     Int              @id @default(autoincrement())
+  user_id                Int
+  name                   String
+  lastname               String
+  gmail                  String?          @default("")
+  gmail_password         String?          @default("")
+  profile_email          String?          @default("")
+  profile_email_password String?          @default("")
+  bio                    String?          @default("")
+  img                    String?          @default("")
+  website                String?          @default("")
+  username               String?          @default("")
+  pronouns               String?          @default("")
+  company_basic          String?          @default("")
+  location_basic         String?          @default("")
+  social_accounts        String?          @default("")
+  topic_about_you        String?          @default("")
+  profile_credential     String?          @default("")
+  description_html       String?          @default("")
+  pais_iso               String?          @default("")
+  mes_nac                Int?             @default(1)
+  year_nac               Int?             @default(2000)
+  day_nac                Int?             @default(1)
+  gender                 String?          @default("")
+  time_zone              String?          @default("")
+  proxy_id               Int?
+  status                 Int              @default(1)
+  empleo                 String?          @default("")
+  educacion              String?          @default("")
+  ubicacion              String?          @default("")
+  user                   User             @relation(fields: [user_id], references: [id])
+  proxy                  Proxy?           @relation(fields: [proxy_id], references: [id])
+  profile_websites       ProfileWebsite[]
+
+  @@map("profile")
+}
+
+model Website {
+  id               Int              @id @default(autoincrement())
+  name             String
+  url              String
+  user_id          Int
+  user             User             @relation(fields: [user_id], references: [id])
+  profile_websites ProfileWebsite[]
+
+  @@map("website")
+}
+
+model ProfileWebsite {
+  id         Int     @id @default(autoincrement())
+  profile_id Int
+  website_id Int
+  email      String
+  password   String
+  cookie     String  @default("")
+  profile    Profile @relation(fields: [profile_id], references: [id])
+  website    Website @relation(fields: [website_id], references: [id])
+
+  @@unique([profile_id, website_id])
+  @@map("profile_website")
+}
+
+model Automation {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  filename    String
+
+  @@map("automation")
+}
+

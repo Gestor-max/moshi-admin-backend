@@ -6,6 +6,7 @@ export interface CreateProfileDto {
   lastname: string;
   gmail?: string;
   gmail_password?: string;
+  email_recovery?: string;
   profile_email?: string;
   profile_email_password?: string;
   bio?: string;
@@ -46,6 +47,7 @@ export class ProfilesService {
               { name: { contains: search } },
               { lastname: { contains: search } },
               { gmail: { contains: search } },
+              { email_recovery: { contains: search } },
               { profile_email: { contains: search } },
             ]
           : undefined,

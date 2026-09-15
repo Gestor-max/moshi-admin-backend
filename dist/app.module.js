@@ -26,6 +26,7 @@ const websites_controller_1 = require("./websites.controller");
 const websites_service_1 = require("./websites.service");
 const automations_controller_1 = require("./automations.controller");
 const automations_service_1 = require("./automations.service");
+const activities_module_1 = require("./activities.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -33,6 +34,7 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             passport_1.PassportModule,
+            activities_module_1.ActivitiesModule,
             jwt_1.JwtModule.register({
                 secret: 'secretKey',
                 signOptions: { expiresIn: '60m' },

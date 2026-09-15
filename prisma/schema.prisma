@@ -69,9 +69,17 @@ model Profile {
   empleo                 String?          @default("")
   educacion              String?          @default("")
   ubicacion              String?          @default("")
+  two_fa                 String?          @default("")
+  telefono               String?          @default("")
   user                   User             @relation(fields: [user_id], references: [id])
   proxy                  Proxy?           @relation(fields: [proxy_id], references: [id])
   profile_websites       ProfileWebsite[]
+  youtube_activities     YoutubeActivity[]
+  quora_activities       QuoraActivity[]
+  medium_activities      MediumActivity[]
+  browser_activities     BrowserActivity[]
+  google_activities      GoogleActivity[]
+  gmaps_activities       GmapsActivity[]
 
   @@map("profile")
 }
@@ -109,4 +117,106 @@ model Automation {
 
   @@map("automation")
 }
+
+model YoutubeActivity {
+  id               Int       @id @default(autoincrement())
+  profile_id       Int
+  search_query     String?   @default("")
+  video_id         String?   @default("")
+  comment_video_id String?   @default("")
+  likes_video_id   String?   @default("")
+  status           Int       @default(0)
+  publish_date     String?   @default("")
+  publish_time     String?   @default("")
+  finished_at      DateTime?
+  created_at       DateTime  @default(now())
+  profile          Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+
+  @@map("youtube_activity")
+}
+
+model QuoraActivity {
+  id                  Int       @id @default(autoincrement())
+  profile_id          Int
+  search_query        String?   @default("")
+  question_id         String?   @default("")
+  answer_id           String?   @default("")
+  upvote_question_id  String?   @default("")
+  upvote_answer_id    String?   @default("")
+  comment_question_id String?   @default("")
+  comment_answer_id   String?   @default("")
+  status              Int       @default(0)
+  publish_date        String?   @default("")
+  publish_time        String?   @default("")
+  finished_at         DateTime?
+  created_at          DateTime  @default(now())
+  profile             Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+
+  @@map("quora_activity")
+}
+
+model MediumActivity {
+  id              Int       @id @default(autoincrement())
+  profile_id      Int
+  search_query    String?   @default("")
+  post_id         String?   @default("")
+  claps_post_id   String?   @default("")
+  comment_post_id String?   @default("")
+  status          Int       @default(0)
+  publish_date    String?   @default("")
+  publish_time    String?   @default("")
+  finished_at     DateTime?
+  created_at      DateTime  @default(now())
+  profile         Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+
+  @@map("medium_activity")
+}
+
+model BrowserActivity {
+  id           Int       @id @default(autoincrement())
+  profile_id   Int
+  link         String?   @default("")
+  status       Int       @default(0)
+  publish_date String?   @default("")
+  publish_time String?   @default("")
+  finished_at  DateTime?
+  created_at   DateTime  @default(now())
+  profile      Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+
+  @@map("browser_activity")
+}
+
+model GoogleActivity {
+  id           Int       @id @default(autoincrement())
+  profile_id   Int
+  search_query String?   @default("")
+  status       Int       @default(0)
+  publish_date String?   @default("")
+  publish_time String?   @default("")
+  finished_at  DateTime?
+  created_at   DateTime  @default(now())
+  profile      Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+
+  @@map("google_activity")
+}
+
+model GmapsActivity {
+  id                Int       @id @default(autoincrement())
+  profile_id        Int
+  place_id          String?   @default("")
+  search_query      String?   @default("")
+  navigate_location String?   @default("")
+  review_text       String?   @default("")
+  rating            Int?      @default(5)
+  status            Int       @default(0)
+  publish_date      String?   @default("")
+  publish_time      String?   @default("")
+  finished_at       DateTime?
+  created_at        DateTime  @default(now())
+  profile           Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+
+  @@map("gmaps_activity")
+}
+
+
 

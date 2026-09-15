@@ -4,6 +4,7 @@ export interface CreateProfileDto {
     lastname: string;
     gmail?: string;
     gmail_password?: string;
+    email_recovery?: string;
     profile_email?: string;
     profile_email_password?: string;
     bio?: string;
@@ -18,6 +19,8 @@ export interface CreateProfileDto {
     empleo?: string | object;
     educacion?: string | object;
     ubicacion?: string | object;
+    two_fa?: string;
+    telefono?: string;
 }
 export declare class ProfilesService {
     private prisma;
@@ -56,6 +59,7 @@ export declare class ProfilesService {
         lastname: string;
         gmail: string | null;
         gmail_password: string | null;
+        email_recovery: string | null;
         profile_email: string | null;
         profile_email_password: string | null;
         bio: string | null;
@@ -78,6 +82,8 @@ export declare class ProfilesService {
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
+        two_fa: string | null;
+        telefono: string | null;
     })[]>;
     findOne(user_id: number, id: number): Promise<({
         proxy: {
@@ -112,6 +118,7 @@ export declare class ProfilesService {
         lastname: string;
         gmail: string | null;
         gmail_password: string | null;
+        email_recovery: string | null;
         profile_email: string | null;
         profile_email_password: string | null;
         bio: string | null;
@@ -134,6 +141,8 @@ export declare class ProfilesService {
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
+        two_fa: string | null;
+        telefono: string | null;
     }) | null>;
     create(user_id: number, data: CreateProfileDto): Promise<{
         proxy: {
@@ -168,6 +177,7 @@ export declare class ProfilesService {
         lastname: string;
         gmail: string | null;
         gmail_password: string | null;
+        email_recovery: string | null;
         profile_email: string | null;
         profile_email_password: string | null;
         bio: string | null;
@@ -190,6 +200,8 @@ export declare class ProfilesService {
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
+        two_fa: string | null;
+        telefono: string | null;
     }>;
     update(user_id: number, id: number, data: Partial<CreateProfileDto>): Promise<import(".prisma/client").Prisma.BatchPayload>;
     delete(user_id: number, id: number): Promise<import(".prisma/client").Prisma.BatchPayload>;

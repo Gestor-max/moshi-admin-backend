@@ -39,6 +39,7 @@ let ProfilesService = class ProfilesService {
                         { name: { contains: search } },
                         { lastname: { contains: search } },
                         { gmail: { contains: search } },
+                        { email_recovery: { contains: search } },
                         { profile_email: { contains: search } },
                     ]
                     : undefined,

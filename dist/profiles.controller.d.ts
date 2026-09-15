@@ -35,6 +35,7 @@ export declare class ProfilesController {
         lastname: string;
         gmail: string | null;
         gmail_password: string | null;
+        email_recovery: string | null;
         profile_email: string | null;
         profile_email_password: string | null;
         bio: string | null;
@@ -57,6 +58,8 @@ export declare class ProfilesController {
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
+        two_fa: string | null;
+        telefono: string | null;
     })[]>;
     findOne(req: any, id: string): Promise<({
         proxy: {
@@ -91,6 +94,7 @@ export declare class ProfilesController {
         lastname: string;
         gmail: string | null;
         gmail_password: string | null;
+        email_recovery: string | null;
         profile_email: string | null;
         profile_email_password: string | null;
         bio: string | null;
@@ -113,6 +117,8 @@ export declare class ProfilesController {
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
+        two_fa: string | null;
+        telefono: string | null;
     }) | null>;
     create(req: any, body: CreateProfileDto): Promise<{
         proxy: {
@@ -147,6 +153,7 @@ export declare class ProfilesController {
         lastname: string;
         gmail: string | null;
         gmail_password: string | null;
+        email_recovery: string | null;
         profile_email: string | null;
         profile_email_password: string | null;
         bio: string | null;
@@ -169,6 +176,8 @@ export declare class ProfilesController {
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
+        two_fa: string | null;
+        telefono: string | null;
     }>;
     update(req: any, id: string, body: Partial<CreateProfileDto>): Promise<import(".prisma/client").Prisma.BatchPayload>;
     delete(req: any, id: string): Promise<import(".prisma/client").Prisma.BatchPayload>;

@@ -21,6 +21,8 @@ export interface CreateProfileDto {
   empleo?: string | object;
   educacion?: string | object;
   ubicacion?: string | object;
+  two_fa?: string;
+  telefono?: string;
 }
 
 @Injectable()

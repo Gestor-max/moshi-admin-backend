@@ -22,6 +22,7 @@ export declare class WebsitesController {
             lastname: string;
             gmail: string | null;
             gmail_password: string | null;
+            email_recovery: string | null;
             profile_email: string | null;
             profile_email_password: string | null;
             bio: string | null;
@@ -44,6 +45,8 @@ export declare class WebsitesController {
             empleo: string | null;
             educacion: string | null;
             ubicacion: string | null;
+            two_fa: string | null;
+            telefono: string | null;
         };
         website: {
             id: number;
@@ -84,6 +87,7 @@ export declare class WebsitesController {
             lastname: string;
             gmail: string | null;
             gmail_password: string | null;
+            email_recovery: string | null;
             profile_email: string | null;
             profile_email_password: string | null;
             bio: string | null;
@@ -106,6 +110,8 @@ export declare class WebsitesController {
             empleo: string | null;
             educacion: string | null;
             ubicacion: string | null;
+            two_fa: string | null;
+            telefono: string | null;
         };
         website: {
             id: number;
@@ -131,6 +137,7 @@ export declare class WebsitesController {
             lastname: string;
             gmail: string | null;
             gmail_password: string | null;
+            email_recovery: string | null;
             profile_email: string | null;
             profile_email_password: string | null;
             bio: string | null;
@@ -153,6 +160,8 @@ export declare class WebsitesController {
             empleo: string | null;
             educacion: string | null;
             ubicacion: string | null;
+            two_fa: string | null;
+            telefono: string | null;
         };
         website: {
             id: number;
@@ -187,6 +196,7 @@ export declare class WebsitesController {
                 lastname: string;
                 gmail: string | null;
                 gmail_password: string | null;
+                email_recovery: string | null;
                 profile_email: string | null;
                 profile_email_password: string | null;
                 bio: string | null;
@@ -209,6 +219,8 @@ export declare class WebsitesController {
                 empleo: string | null;
                 educacion: string | null;
                 ubicacion: string | null;
+                two_fa: string | null;
+                telefono: string | null;
             };
         } & {
             id: number;

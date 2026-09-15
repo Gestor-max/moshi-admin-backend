@@ -17,10 +17,12 @@ import { WebsitesController } from './websites.controller';
 import { WebsitesService } from './websites.service';
 import { AutomationsController } from './automations.controller';
 import { AutomationsService } from './automations.service';
+import { ActivitiesModule } from './activities.module';
 
 @Module({
   imports: [
     PassportModule,
+    ActivitiesModule,
     JwtModule.register({
       secret: 'secretKey', // In production, use environment variables
       signOptions: { expiresIn: '60m' },

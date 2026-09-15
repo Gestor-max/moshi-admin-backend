@@ -17,11 +17,23 @@ model User {
   name     String?
   status   Int       @default(1)
   rol      Int       @default(2)
-  profiles Profile[]
-  proxies  Proxy[]
-  websites Website[]
+  profiles  Profile[]
+  proxies   Proxy[]
+  websites  Website[]
+  locations Location[]
 
   @@map("user")
+}
+
+model Location {
+  id       Int       @id @default(autoincrement())
+  state    String
+  location String
+  user_id  Int
+  user     User      @relation(fields: [user_id], references: [id])
+  profiles Profile[]
+
+  @@map("location")
 }
 
 model Proxy {
@@ -65,6 +77,7 @@ model Profile {
   gender                 String?          @default("")
   time_zone              String?          @default("")
   proxy_id               Int?
+  location_id            Int?
   status                 Int              @default(1)
   empleo                 String?          @default("")
   educacion              String?          @default("")
@@ -73,6 +86,7 @@ model Profile {
   telefono               String?          @default("")
   user                   User             @relation(fields: [user_id], references: [id])
   proxy                  Proxy?           @relation(fields: [proxy_id], references: [id])
+  location               Location?        @relation(fields: [location_id], references: [id])
   profile_websites       ProfileWebsite[]
   youtube_activities     YoutubeActivity[]
   quora_activities       QuoraActivity[]

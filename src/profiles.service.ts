@@ -56,6 +56,7 @@ export class ProfilesService {
       },
       include: {
         proxy: true,
+        location: true,
         profile_websites: {
           include: {
             website: true,
@@ -71,6 +72,7 @@ export class ProfilesService {
       where: { id, user_id },
       include: {
         proxy: true,
+        location: true,
         profile_websites: {
           include: {
             website: true,
@@ -80,19 +82,21 @@ export class ProfilesService {
     });
   }
 
-  async create(user_id: number, data: CreateProfileDto) {
-    const { empleo, educacion, ubicacion, proxy_id, ...rest } = data;
+  async create(user_id: number, data: any) {
+    const { empleo, educacion, ubicacion, proxy_id, location_id, ...rest } = data;
     return this.prisma.profile.create({
       data: {
         ...rest,
         user_id,
         proxy_id: proxy_id ? Number(proxy_id) : null,
+        location_id: location_id ? Number(location_id) : null,
         empleo: this.stringifyJsonField(empleo),
         educacion: this.stringifyJsonField(educacion),
         ubicacion: this.stringifyJsonField(ubicacion),
       },
       include: {
         proxy: true,
+        location: true,
         profile_websites: {
           include: {
             website: true,
@@ -102,8 +106,16 @@ export class ProfilesService {
     });
   }
 
-  async update(user_id: number, id: number, data: Partial<CreateProfileDto>) {
+  async update(user_id: number, id: number, data: any) {
     const updateData: any = { ...data };
+    delete updateData.id;
+    delete updateData.user_id;
+    delete updateData.proxy;
+    delete updateData.location;
+    delete updateData.profile_websites;
+    delete updateData.created_at;
+    delete updateData.updated_at;
+
     if (data.empleo !== undefined) {
       updateData.empleo = this.stringifyJsonField(data.empleo);
     }
@@ -115,6 +127,9 @@ export class ProfilesService {
     }
     if (data.proxy_id !== undefined) {
       updateData.proxy_id = data.proxy_id ? Number(data.proxy_id) : null;
+    }
+    if (data.location_id !== undefined) {
+      updateData.location_id = data.location_id ? Number(data.location_id) : null;
     }
 
     return this.prisma.profile.updateMany({

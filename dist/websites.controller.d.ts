@@ -42,6 +42,11 @@ export declare class WebsitesController {
             gender: string | null;
             time_zone: string | null;
             proxy_id: number | null;
+            location_id: number | null;
+            location_proxy_id: number | null;
+            location_proxy_alt_id: number | null;
+            tag_id: number | null;
+            is_archived: boolean;
             empleo: string | null;
             educacion: string | null;
             ubicacion: string | null;
@@ -107,6 +112,11 @@ export declare class WebsitesController {
             gender: string | null;
             time_zone: string | null;
             proxy_id: number | null;
+            location_id: number | null;
+            location_proxy_id: number | null;
+            location_proxy_alt_id: number | null;
+            tag_id: number | null;
+            is_archived: boolean;
             empleo: string | null;
             educacion: string | null;
             ubicacion: string | null;
@@ -157,6 +167,11 @@ export declare class WebsitesController {
             gender: string | null;
             time_zone: string | null;
             proxy_id: number | null;
+            location_id: number | null;
+            location_proxy_id: number | null;
+            location_proxy_alt_id: number | null;
+            tag_id: number | null;
+            is_archived: boolean;
             empleo: string | null;
             educacion: string | null;
             ubicacion: string | null;
@@ -216,6 +231,11 @@ export declare class WebsitesController {
                 gender: string | null;
                 time_zone: string | null;
                 proxy_id: number | null;
+                location_id: number | null;
+                location_proxy_id: number | null;
+                location_proxy_alt_id: number | null;
+                tag_id: number | null;
+                is_archived: boolean;
                 empleo: string | null;
                 educacion: string | null;
                 ubicacion: string | null;

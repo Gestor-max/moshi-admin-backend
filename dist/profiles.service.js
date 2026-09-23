@@ -29,23 +29,35 @@ let ProfilesService = class ProfilesService {
             return '';
         }
     }
-    async findAll(user_id, search) {
+    async findAll(user_id, search, archived) {
         const hasSearch = search && search.trim().length > 0;
+        let isArchivedCondition = false;
+        if (archived === 'all') {
+            isArchivedCondition = undefined;
+        }
+        else if (archived === 'true' || archived === true) {
+            isArchivedCondition = true;
+        }
         return this.prisma.profile.findMany({
             where: {
                 user_id,
+                is_archived: isArchivedCondition,
                 OR: hasSearch
                     ? [
-                        { name: { contains: search } },
-                        { lastname: { contains: search } },
-                        { gmail: { contains: search } },
-                        { email_recovery: { contains: search } },
-                        { profile_email: { contains: search } },
+                        { name: { contains: search, mode: 'insensitive' } },
+                        { lastname: { contains: search, mode: 'insensitive' } },
+                        { gmail: { contains: search, mode: 'insensitive' } },
+                        { email_recovery: { contains: search, mode: 'insensitive' } },
+                        { profile_email: { contains: search, mode: 'insensitive' } },
                     ]
                     : undefined,
             },
             include: {
                 proxy: true,
+                location: true,
+                location_proxy: true,
+                location_proxy_alt: true,
+                tag: true,
                 profile_websites: {
                     include: {
                         website: true,
@@ -60,6 +72,10 @@ let ProfilesService = class ProfilesService {
             where: { id, user_id },
             include: {
                 proxy: true,
+                location: true,
+                location_proxy: true,
+                location_proxy_alt: true,
+                tag: true,
                 profile_websites: {
                     include: {
                         website: true,
@@ -69,18 +85,26 @@ let ProfilesService = class ProfilesService {
         });
     }
     async create(user_id, data) {
-        const { empleo, educacion, ubicacion, proxy_id, ...rest } = data;
+        const { empleo, educacion, ubicacion, proxy_id, location_id, location_proxy_id, location_proxy_alt_id, tag_id, ...rest } = data;
         return this.prisma.profile.create({
             data: {
                 ...rest,
                 user_id,
                 proxy_id: proxy_id ? Number(proxy_id) : null,
+                location_id: location_id ? Number(location_id) : null,
+                location_proxy_id: location_proxy_id ? Number(location_proxy_id) : null,
+                location_proxy_alt_id: location_proxy_alt_id ? Number(location_proxy_alt_id) : null,
+                tag_id: tag_id ? Number(tag_id) : null,
                 empleo: this.stringifyJsonField(empleo),
                 educacion: this.stringifyJsonField(educacion),
                 ubicacion: this.stringifyJsonField(ubicacion),
             },
             include: {
                 proxy: true,
+                location: true,
+                location_proxy: true,
+                location_proxy_alt: true,
+                tag: true,
                 profile_websites: {
                     include: {
                         website: true,
@@ -91,6 +115,17 @@ let ProfilesService = class ProfilesService {
     }
     async update(user_id, id, data) {
         const updateData = { ...data };
+        delete updateData.id;
+        delete updateData.user_id;
+        delete updateData.proxy;
+        delete updateData.location;
+        delete updateData.location_proxy;
+        delete updateData.location_proxy_alt;
+        delete updateData.tag;
+        delete updateData.profile_websites;
+        delete updateData.activity_logs;
+        delete updateData.created_at;
+        delete updateData.updated_at;
         if (data.empleo !== undefined) {
             updateData.empleo = this.stringifyJsonField(data.empleo);
         }
@@ -103,9 +138,30 @@ let ProfilesService = class ProfilesService {
         if (data.proxy_id !== undefined) {
             updateData.proxy_id = data.proxy_id ? Number(data.proxy_id) : null;
         }
+        if (data.location_id !== undefined) {
+            updateData.location_id = data.location_id ? Number(data.location_id) : null;
+        }
+        if (data.location_proxy_id !== undefined) {
+            updateData.location_proxy_id = data.location_proxy_id ? Number(data.location_proxy_id) : null;
+        }
+        if (data.location_proxy_alt_id !== undefined) {
+            updateData.location_proxy_alt_id = data.location_proxy_alt_id ? Number(data.location_proxy_alt_id) : null;
+        }
+        if (data.tag_id !== undefined) {
+            updateData.tag_id = data.tag_id ? Number(data.tag_id) : null;
+        }
+        if (data.is_archived !== undefined) {
+            updateData.is_archived = Boolean(data.is_archived);
+        }
         return this.prisma.profile.updateMany({
             where: { id, user_id },
             data: updateData,
+        });
+    }
+    async archive(user_id, id, is_archived = true) {
+        return this.prisma.profile.updateMany({
+            where: { id, user_id },
+            data: { is_archived },
         });
     }
     async delete(user_id, id) {

@@ -307,6 +307,221 @@ let ActivitiesService = class ActivitiesService {
             return this.prisma.gmapsActivity.delete({ where: { id } });
         }
     }
+    async logActivity(userId, data) {
+        await this.verifyProfileOwnership(userId, Number(data.profile_id));
+        return this.prisma.activityLog.create({
+            data: {
+                profile_id: Number(data.profile_id),
+                activity_name: data.activity_name || '',
+                platform: data.platform || '',
+                status: data.status || 'Correcto',
+                message: data.message || '',
+            },
+        });
+    }
+    async getActivityLogsByProfile(userId, profileId) {
+        await this.verifyProfileOwnership(userId, profileId);
+        return this.prisma.activityLog.findMany({
+            where: { profile_id: profileId },
+            orderBy: { created_at: 'desc' },
+            take: 100,
+        });
+    }
+    async createBulkProfile(userId, platform, body) {
+        const profileId = Number(body.profile_id);
+        await this.verifyProfileOwnership(userId, profileId);
+        const rawList = body.queries || body.entries || [];
+        const cleanList = rawList
+            .map((item) => (typeof item === 'string' ? item.trim() : ''))
+            .filter((item) => item.length > 0);
+        const publish_date = body.publish_date || '';
+        const publish_time = body.publish_time || '';
+        const createdItems = [];
+        for (const item of cleanList) {
+            if (platform === 'youtube') {
+                const isVideo = body.action_type === 'view_video';
+                const res = await this.prisma.youtubeActivity.create({
+                    data: {
+                        profile_id: profileId,
+                        search_query: isVideo ? '' : item,
+                        video_id: isVideo ? item : '',
+                        status: 0,
+                        publish_date,
+                        publish_time,
+                    },
+                });
+                createdItems.push(res);
+            }
+            else if (platform === 'google') {
+                const res = await this.prisma.googleActivity.create({
+                    data: {
+                        profile_id: profileId,
+                        search_query: item,
+                        status: 0,
+                        publish_date,
+                        publish_time,
+                    },
+                });
+                createdItems.push(res);
+            }
+            else if (platform === 'browser') {
+                const res = await this.prisma.browserActivity.create({
+                    data: {
+                        profile_id: profileId,
+                        link: item,
+                        status: 0,
+                        publish_date,
+                        publish_time,
+                    },
+                });
+                createdItems.push(res);
+            }
+            else if (platform === 'gmaps') {
+                const isPlaceId = body.action_type === 'gmaps_visit' || item.startsWith('http') || item.startsWith('ChIJ');
+                const res = await this.prisma.gmapsActivity.create({
+                    data: {
+                        profile_id: profileId,
+                        search_query: isPlaceId ? '' : item,
+                        place_id: isPlaceId ? item : '',
+                        status: 0,
+                        publish_date,
+                        publish_time,
+                    },
+                });
+                createdItems.push(res);
+            }
+        }
+        return {
+            success: true,
+            total_created: createdItems.length,
+            items: createdItems,
+        };
+    }
+    async createBulkLocation(userId, body) {
+        const locationId = Number(body.location_id);
+        const location = await this.prisma.location.findFirst({
+            where: { id: locationId, user_id: userId },
+        });
+        if (!location) {
+            throw new common_1.NotFoundException('Ubicación no encontrada');
+        }
+        const profiles = await this.prisma.profile.findMany({
+            where: {
+                user_id: userId,
+                location_id: locationId,
+                is_archived: false,
+            },
+        });
+        if (!profiles || profiles.length === 0) {
+            return {
+                success: false,
+                profiles_count: 0,
+                activities_created: 0,
+                message: 'No se encontraron perfiles activos asociados a esta ubicación.',
+            };
+        }
+        const rawList = body.entries || [];
+        const cleanEntries = rawList
+            .map((e) => (typeof e === 'string' ? e.trim() : ''))
+            .filter((e) => e.length > 0);
+        if (cleanEntries.length === 0) {
+            return {
+                success: false,
+                profiles_count: profiles.length,
+                activities_created: 0,
+                message: 'No se proporcionaron registros válidos para importar.',
+            };
+        }
+        const publish_date = body.publish_date || '';
+        const publish_time = body.publish_time || '';
+        let totalCreated = 0;
+        for (const prof of profiles) {
+            for (const entry of cleanEntries) {
+                switch (body.activity_type) {
+                    case 'browser_link':
+                        await this.prisma.browserActivity.create({
+                            data: {
+                                profile_id: prof.id,
+                                link: entry,
+                                status: 0,
+                                publish_date,
+                                publish_time,
+                            },
+                        });
+                        totalCreated++;
+                        break;
+                    case 'google_search':
+                        await this.prisma.googleActivity.create({
+                            data: {
+                                profile_id: prof.id,
+                                search_query: entry,
+                                status: 0,
+                                publish_date,
+                                publish_time,
+                            },
+                        });
+                        totalCreated++;
+                        break;
+                    case 'youtube_search':
+                        await this.prisma.youtubeActivity.create({
+                            data: {
+                                profile_id: prof.id,
+                                search_query: entry,
+                                status: 0,
+                                publish_date,
+                                publish_time,
+                            },
+                        });
+                        totalCreated++;
+                        break;
+                    case 'youtube_video':
+                        await this.prisma.youtubeActivity.create({
+                            data: {
+                                profile_id: prof.id,
+                                video_id: entry,
+                                status: 0,
+                                publish_date,
+                                publish_time,
+                            },
+                        });
+                        totalCreated++;
+                        break;
+                    case 'gmaps_search':
+                        await this.prisma.gmapsActivity.create({
+                            data: {
+                                profile_id: prof.id,
+                                search_query: entry,
+                                status: 0,
+                                publish_date,
+                                publish_time,
+                            },
+                        });
+                        totalCreated++;
+                        break;
+                    case 'gmaps_place_id':
+                        await this.prisma.gmapsActivity.create({
+                            data: {
+                                profile_id: prof.id,
+                                place_id: entry,
+                                status: 0,
+                                publish_date,
+                                publish_time,
+                            },
+                        });
+                        totalCreated++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        return {
+            success: true,
+            profiles_count: profiles.length,
+            activities_created: totalCreated,
+            message: `Se crearon ${totalCreated} actividades exitosamente para ${profiles.length} perfiles.`,
+        };
+    }
 };
 exports.ActivitiesService = ActivitiesService;
 exports.ActivitiesService = ActivitiesService = __decorate([

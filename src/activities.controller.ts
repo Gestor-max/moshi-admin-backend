@@ -21,6 +21,22 @@ import { Response } from 'express';
 export class ActivitiesController {
   constructor(private activitiesService: ActivitiesService) {}
 
+  @Post('log')
+  async createLog(@Request() req, @Body() body: any) {
+    return this.activitiesService.logActivity(req.user.user_id, body);
+  }
+
+  @Get('log/profile/:profileId')
+  async getLogsByProfile(
+    @Request() req,
+    @Param('profileId', ParseIntPipe) profileId: number,
+  ) {
+    return this.activitiesService.getActivityLogsByProfile(
+      req.user.user_id,
+      profileId,
+    );
+  }
+
   @Get('profile/:profileId')
   async getByProfile(
     @Request() req,
@@ -48,6 +64,24 @@ export class ActivitiesController {
       `attachment; filename="profile_${profileId}_activities.json"`,
     );
     return res.status(200).send(JSON.stringify(activities, null, 2));
+  }
+
+  @Post('bulk-location')
+  async createBulkLocation(@Request() req, @Body() body: any) {
+    return this.activitiesService.createBulkLocation(req.user.user_id, body);
+  }
+
+  @Post(':platform/bulk')
+  async createBulk(
+    @Request() req,
+    @Param('platform') platform: string,
+    @Body() body: any,
+  ) {
+    return this.activitiesService.createBulkProfile(
+      req.user.user_id,
+      platform,
+      body,
+    );
   }
 
   @Post(':platform')

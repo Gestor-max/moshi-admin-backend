@@ -19,8 +19,12 @@ export class ProfilesController {
   constructor(private profilesService: ProfilesService) {}
 
   @Get()
-  async findAll(@Request() req, @Query('search') search: string) {
-    return this.profilesService.findAll(req.user.user_id, search);
+  async findAll(
+    @Request() req,
+    @Query('search') search: string,
+    @Query('archived') archived: string,
+  ) {
+    return this.profilesService.findAll(req.user.user_id, search, archived);
   }
 
   @Get(':id')
@@ -40,6 +44,16 @@ export class ProfilesController {
     @Body() body: Partial<CreateProfileDto>,
   ) {
     return this.profilesService.update(req.user.user_id, parseInt(id), body);
+  }
+
+  @Patch(':id/archive')
+  async archive(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() body: { is_archived?: boolean },
+  ) {
+    const isArchived = body.is_archived !== undefined ? body.is_archived : true;
+    return this.profilesService.archive(req.user.user_id, parseInt(id), isArchived);
   }
 
   @Delete(':id')

@@ -19,12 +19,14 @@ import { AutomationsController } from './automations.controller';
 import { AutomationsService } from './automations.service';
 import { ActivitiesModule } from './activities.module';
 import { LocationsModule } from './locations.module';
+import { TagsModule } from './tags.module';
 
 @Module({
   imports: [
     PassportModule,
     ActivitiesModule,
     LocationsModule,
+    TagsModule,
     JwtModule.register({
       secret: 'secretKey', // In production, use environment variables
       signOptions: { expiresIn: '60m' },

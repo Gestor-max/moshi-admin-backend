@@ -21,17 +21,20 @@ model User {
   proxies   Proxy[]
   websites  Website[]
   locations Location[]
+  tags      Tag[]
 
   @@map("user")
 }
 
 model Location {
-  id       Int       @id @default(autoincrement())
-  state    String
-  location String
-  user_id  Int
-  user     User      @relation(fields: [user_id], references: [id])
-  profiles Profile[]
+  id                  Int       @id @default(autoincrement())
+  state               String
+  location            String
+  user_id             Int
+  user                User      @relation(fields: [user_id], references: [id])
+  profiles            Profile[] @relation("ProfileLocation")
+  proxy_profiles      Profile[] @relation("ProfileProxyLocation")
+  proxy_alt_profiles  Profile[] @relation("ProfileProxyAltLocation")
 
   @@map("location")
 }
@@ -78,7 +81,11 @@ model Profile {
   time_zone              String?          @default("")
   proxy_id               Int?
   location_id            Int?
+  location_proxy_id      Int?
+  location_proxy_alt_id  Int?
+  tag_id                 Int?
   status                 Int              @default(1)
+  is_archived            Boolean          @default(false)
   empleo                 String?          @default("")
   educacion              String?          @default("")
   ubicacion              String?          @default("")
@@ -86,7 +93,10 @@ model Profile {
   telefono               String?          @default("")
   user                   User             @relation(fields: [user_id], references: [id])
   proxy                  Proxy?           @relation(fields: [proxy_id], references: [id])
-  location               Location?        @relation(fields: [location_id], references: [id])
+  location               Location?        @relation("ProfileLocation", fields: [location_id], references: [id])
+  location_proxy         Location?        @relation("ProfileProxyLocation", fields: [location_proxy_id], references: [id])
+  location_proxy_alt     Location?        @relation("ProfileProxyAltLocation", fields: [location_proxy_alt_id], references: [id])
+  tag                    Tag?             @relation(fields: [tag_id], references: [id])
   profile_websites       ProfileWebsite[]
   youtube_activities     YoutubeActivity[]
   quora_activities       QuoraActivity[]
@@ -94,6 +104,7 @@ model Profile {
   browser_activities     BrowserActivity[]
   google_activities      GoogleActivity[]
   gmaps_activities       GmapsActivity[]
+  activity_logs          ActivityLog[]
 
   @@map("profile")
 }
@@ -232,5 +243,28 @@ model GmapsActivity {
   @@map("gmaps_activity")
 }
 
+model ActivityLog {
+  id            Int      @id @default(autoincrement())
+  profile_id    Int
+  activity_name String
+  platform      String?  @default("")
+  status        String
+  message       String?  @default("")
+  created_at    DateTime @default(now())
+  profile       Profile  @relation(fields: [profile_id], references: [id], onDelete: Cascade)
 
+  @@map("activity_log")
+}
+
+model Tag {
+  id         Int       @id @default(autoincrement())
+  name       String
+  color      String?   @default("#3b82f6")
+  user_id    Int
+  user       User      @relation(fields: [user_id], references: [id])
+  profiles   Profile[]
+  created_at DateTime  @default(now())
+
+  @@map("tag")
+}
 

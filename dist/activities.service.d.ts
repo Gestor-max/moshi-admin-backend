@@ -176,4 +176,52 @@ export declare class ActivitiesService {
         finished_at: Date | null;
         created_at: Date;
     } | undefined>;
+    logActivity(userId: number, data: {
+        profile_id: number;
+        activity_name: string;
+        status: string;
+        message?: string;
+        platform?: string;
+    }): Promise<{
+        id: number;
+        status: string;
+        profile_id: number;
+        created_at: Date;
+        activity_name: string;
+        platform: string | null;
+        message: string | null;
+    }>;
+    getActivityLogsByProfile(userId: number, profileId: number): Promise<{
+        id: number;
+        status: string;
+        profile_id: number;
+        created_at: Date;
+        activity_name: string;
+        platform: string | null;
+        message: string | null;
+    }[]>;
+    createBulkProfile(userId: number, platform: string, body: {
+        profile_id: number;
+        queries?: string[];
+        entries?: string[];
+        action_type?: string;
+        publish_date?: string;
+        publish_time?: string;
+    }): Promise<{
+        success: boolean;
+        total_created: number;
+        items: any[];
+    }>;
+    createBulkLocation(userId: number, body: {
+        location_id: number;
+        activity_type: string;
+        entries: string[];
+        publish_date?: string;
+        publish_time?: string;
+    }): Promise<{
+        success: boolean;
+        profiles_count: number;
+        activities_created: number;
+        message: string;
+    }>;
 }

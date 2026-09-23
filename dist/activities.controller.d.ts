@@ -3,6 +3,24 @@ import { Response } from 'express';
 export declare class ActivitiesController {
     private activitiesService;
     constructor(activitiesService: ActivitiesService);
+    createLog(req: any, body: any): Promise<{
+        id: number;
+        status: string;
+        profile_id: number;
+        created_at: Date;
+        activity_name: string;
+        platform: string | null;
+        message: string | null;
+    }>;
+    getLogsByProfile(req: any, profileId: number): Promise<{
+        id: number;
+        status: string;
+        profile_id: number;
+        created_at: Date;
+        activity_name: string;
+        platform: string | null;
+        message: string | null;
+    }[]>;
     getByProfile(req: any, profileId: number): Promise<{
         youtube: {
             id: number;
@@ -82,6 +100,17 @@ export declare class ActivitiesController {
         }[];
     }>;
     exportActivities(req: any, profileId: number, res: Response): Promise<Response<any, Record<string, any>>>;
+    createBulkLocation(req: any, body: any): Promise<{
+        success: boolean;
+        profiles_count: number;
+        activities_created: number;
+        message: string;
+    }>;
+    createBulk(req: any, platform: string, body: any): Promise<{
+        success: boolean;
+        total_created: number;
+        items: any[];
+    }>;
     create(req: any, platform: string, body: any): Promise<{
         id: number;
         status: number;

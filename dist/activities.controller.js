@@ -21,6 +21,12 @@ let ActivitiesController = class ActivitiesController {
     constructor(activitiesService) {
         this.activitiesService = activitiesService;
     }
+    async createLog(req, body) {
+        return this.activitiesService.logActivity(req.user.user_id, body);
+    }
+    async getLogsByProfile(req, profileId) {
+        return this.activitiesService.getActivityLogsByProfile(req.user.user_id, profileId);
+    }
     async getByProfile(req, profileId) {
         return this.activitiesService.getActivitiesByProfile(req.user.user_id, profileId);
     }
@@ -29,6 +35,12 @@ let ActivitiesController = class ActivitiesController {
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Content-Disposition', `attachment; filename="profile_${profileId}_activities.json"`);
         return res.status(200).send(JSON.stringify(activities, null, 2));
+    }
+    async createBulkLocation(req, body) {
+        return this.activitiesService.createBulkLocation(req.user.user_id, body);
+    }
+    async createBulk(req, platform, body) {
+        return this.activitiesService.createBulkProfile(req.user.user_id, platform, body);
     }
     async create(req, platform, body) {
         return this.activitiesService.createActivity(req.user.user_id, platform, body);
@@ -48,6 +60,22 @@ let ActivitiesController = class ActivitiesController {
 };
 exports.ActivitiesController = ActivitiesController;
 __decorate([
+    (0, common_1.Post)('log'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "createLog", null);
+__decorate([
+    (0, common_1.Get)('log/profile/:profileId'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)('profileId', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number]),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "getLogsByProfile", null);
+__decorate([
     (0, common_1.Get)('profile/:profileId'),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Param)('profileId', common_1.ParseIntPipe)),
@@ -64,6 +92,23 @@ __decorate([
     __metadata("design:paramtypes", [Object, Number, Object]),
     __metadata("design:returntype", Promise)
 ], ActivitiesController.prototype, "exportActivities", null);
+__decorate([
+    (0, common_1.Post)('bulk-location'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "createBulkLocation", null);
+__decorate([
+    (0, common_1.Post)(':platform/bulk'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)('platform')),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "createBulk", null);
 __decorate([
     (0, common_1.Post)(':platform'),
     __param(0, (0, common_1.Request)()),

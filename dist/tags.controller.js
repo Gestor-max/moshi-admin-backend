@@ -12,45 +12,40 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProfilesController = void 0;
+exports.TagsController = void 0;
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
-const profiles_service_1 = require("./profiles.service");
-let ProfilesController = class ProfilesController {
-    profilesService;
-    constructor(profilesService) {
-        this.profilesService = profilesService;
+const tags_service_1 = require("./tags.service");
+let TagsController = class TagsController {
+    tagsService;
+    constructor(tagsService) {
+        this.tagsService = tagsService;
     }
-    async findAll(req, search, archived) {
-        return this.profilesService.findAll(req.user.user_id, search, archived);
+    async findAll(req, search) {
+        return this.tagsService.findAll(req.user.user_id, search);
     }
     async findOne(req, id) {
-        return this.profilesService.findOne(req.user.user_id, parseInt(id));
+        return this.tagsService.findOne(req.user.user_id, parseInt(id));
     }
     async create(req, body) {
-        return this.profilesService.create(req.user.user_id, body);
+        return this.tagsService.create(req.user.user_id, body);
     }
     async update(req, id, body) {
-        return this.profilesService.update(req.user.user_id, parseInt(id), body);
-    }
-    async archive(req, id, body) {
-        const isArchived = body.is_archived !== undefined ? body.is_archived : true;
-        return this.profilesService.archive(req.user.user_id, parseInt(id), isArchived);
+        return this.tagsService.update(req.user.user_id, parseInt(id), body);
     }
     async delete(req, id) {
-        return this.profilesService.delete(req.user.user_id, parseInt(id));
+        return this.tagsService.delete(req.user.user_id, parseInt(id));
     }
 };
-exports.ProfilesController = ProfilesController;
+exports.TagsController = TagsController;
 __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)('search')),
-    __param(2, (0, common_1.Query)('archived')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
-], ProfilesController.prototype, "findAll", null);
+], TagsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Request)()),
@@ -58,7 +53,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
-], ProfilesController.prototype, "findOne", null);
+], TagsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Request)()),
@@ -66,7 +61,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
-], ProfilesController.prototype, "create", null);
+], TagsController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Request)()),
@@ -75,16 +70,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, String, Object]),
     __metadata("design:returntype", Promise)
-], ProfilesController.prototype, "update", null);
-__decorate([
-    (0, common_1.Patch)(':id/archive'),
-    __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Param)('id')),
-    __param(2, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, Object]),
-    __metadata("design:returntype", Promise)
-], ProfilesController.prototype, "archive", null);
+], TagsController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Request)()),
@@ -92,10 +78,10 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
-], ProfilesController.prototype, "delete", null);
-exports.ProfilesController = ProfilesController = __decorate([
-    (0, common_1.Controller)('profiles'),
+], TagsController.prototype, "delete", null);
+exports.TagsController = TagsController = __decorate([
+    (0, common_1.Controller)('tags'),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
-    __metadata("design:paramtypes", [profiles_service_1.ProfilesService])
-], ProfilesController);
-//# sourceMappingURL=profiles.controller.js.map
+    __metadata("design:paramtypes", [tags_service_1.TagsService])
+], TagsController);
+//# sourceMappingURL=tags.controller.js.map

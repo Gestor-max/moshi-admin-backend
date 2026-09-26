@@ -29,6 +29,7 @@ const automations_service_1 = require("./automations.service");
 const activities_module_1 = require("./activities.module");
 const locations_module_1 = require("./locations.module");
 const tags_module_1 = require("./tags.module");
+const schedules_module_1 = require("./schedules.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -39,6 +40,7 @@ exports.AppModule = AppModule = __decorate([
             activities_module_1.ActivitiesModule,
             locations_module_1.LocationsModule,
             tags_module_1.TagsModule,
+            schedules_module_1.SchedulesModule,
             jwt_1.JwtModule.register({
                 secret: 'secretKey',
                 signOptions: { expiresIn: '60m' },

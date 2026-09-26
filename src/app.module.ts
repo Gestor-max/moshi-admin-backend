@@ -20,6 +20,7 @@ import { AutomationsService } from './automations.service';
 import { ActivitiesModule } from './activities.module';
 import { LocationsModule } from './locations.module';
 import { TagsModule } from './tags.module';
+import { SchedulesModule } from './schedules.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { TagsModule } from './tags.module';
     ActivitiesModule,
     LocationsModule,
     TagsModule,
+    SchedulesModule,
     JwtModule.register({
       secret: 'secretKey', // In production, use environment variables
       signOptions: { expiresIn: '60m' },

@@ -22,6 +22,7 @@ model User {
   websites  Website[]
   locations Location[]
   tags      Tag[]
+  schedules Schedule[]
 
   @@map("user")
 }
@@ -35,6 +36,7 @@ model Location {
   profiles            Profile[] @relation("ProfileLocation")
   proxy_profiles      Profile[] @relation("ProfileProxyLocation")
   proxy_alt_profiles  Profile[] @relation("ProfileProxyAltLocation")
+  schedules           Schedule[]
 
   @@map("location")
 }
@@ -266,5 +268,31 @@ model Tag {
   created_at DateTime  @default(now())
 
   @@map("tag")
+}
+
+model Schedule {
+  id                Int               @id @default(autoincrement())
+  user_id           Int
+  location_id       Int
+  start_time        String
+  end_time          String
+  is_active         Boolean           @default(true)
+  rotate_proxy      Boolean           @default(false)
+  created_at        DateTime          @default(now())
+  user              User              @relation(fields: [user_id], references: [id])
+  location          Location          @relation(fields: [location_id], references: [id], onDelete: Cascade)
+  schedule_activity ScheduleActivity?
+
+  @@map("schedule")
+}
+
+model ScheduleActivity {
+  id          Int      @id @default(autoincrement())
+  schedule_id Int      @unique
+  activities  Json     @default("[]")
+  created_at  DateTime @default(now())
+  schedule    Schedule @relation(fields: [schedule_id], references: [id], onDelete: Cascade)
+
+  @@map("schedule_activity")
 }
 

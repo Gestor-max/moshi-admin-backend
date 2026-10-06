@@ -88,6 +88,7 @@ model Profile {
   tag_id                 Int?
   status                 Int              @default(1)
   is_archived            Boolean          @default(false)
+  is_zombie              Int              @default(0)
   empleo                 String?          @default("")
   educacion              String?          @default("")
   ubicacion              String?          @default("")
@@ -107,6 +108,7 @@ model Profile {
   google_activities      GoogleActivity[]
   gmaps_activities       GmapsActivity[]
   activity_logs          ActivityLog[]
+  gmaps_reviews          GmapsReview[]
 
   @@map("profile")
 }
@@ -294,5 +296,18 @@ model ScheduleActivity {
   schedule    Schedule @relation(fields: [schedule_id], references: [id], onDelete: Cascade)
 
   @@map("schedule_activity")
+}
+
+model GmapsReview {
+  id         Int      @id @default(autoincrement())
+  place_id   String?  @default("")
+  name_place String?  @default("")
+  review     String?  @default("")
+  kind       Int      @default(1)
+  profile_id Int?
+  created_at DateTime @default(now())
+  profile    Profile? @relation(fields: [profile_id], references: [id], onDelete: SetNull)
+
+  @@map("gmaps_reviews")
 }
 

@@ -39,7 +39,7 @@ export class ProfilesService {
     }
   }
 
-  async findAll(user_id: number, search?: string, archived?: string | boolean) {
+  async findAll(user_id: number, search?: string, archived?: string | boolean, zombie?: string | number | boolean) {
     const hasSearch = search && search.trim().length > 0;
     
     // Filtro de archivado: si archived es 'all', no filtra; si es 'true'/true, solo archivados; por defecto (false), solo no archivados.
@@ -50,10 +50,26 @@ export class ProfilesService {
       isArchivedCondition = true;
     }
 
+    // Filtro de zombie: si zombie es 'all', no filtra; si es 'true'/true/'1'/1, solo zombies; por defecto (si archived no es true), solo no zombies (0).
+    let isZombieCondition: number | undefined = 0;
+    if (zombie === 'all') {
+      isZombieCondition = undefined;
+    } else if (zombie === 'true' || zombie === true || zombie === '1' || zombie === 1) {
+      isZombieCondition = 1;
+      if (archived === undefined) {
+        isArchivedCondition = undefined;
+      }
+    } else if (zombie === 'false' || zombie === false || zombie === '0' || zombie === 0) {
+      isZombieCondition = 0;
+    } else if (archived === 'true' || archived === true) {
+      isZombieCondition = undefined;
+    }
+
     return this.prisma.profile.findMany({
       where: {
         user_id,
         is_archived: isArchivedCondition,
+        is_zombie: isZombieCondition,
         OR: hasSearch
           ? [
               { name: { contains: search, mode: 'insensitive' } },
@@ -75,6 +91,16 @@ export class ProfilesService {
             website: true,
           },
         },
+        _count: {
+          select: {
+            google_activities: true,
+            youtube_activities: true,
+            gmaps_activities: true,
+            browser_activities: true,
+            quora_activities: true,
+            medium_activities: true,
+          },
+        },
       },
       orderBy: { id: 'asc' },
     });
@@ -92,6 +118,16 @@ export class ProfilesService {
         profile_websites: {
           include: {
             website: true,
+          },
+        },
+        _count: {
+          select: {
+            google_activities: true,
+            youtube_activities: true,
+            gmaps_activities: true,
+            browser_activities: true,
+            quora_activities: true,
+            medium_activities: true,
           },
         },
       },
@@ -169,6 +205,9 @@ export class ProfilesService {
     if (data.is_archived !== undefined) {
       updateData.is_archived = Boolean(data.is_archived);
     }
+    if (data.is_zombie !== undefined) {
+      updateData.is_zombie = Number(data.is_zombie) || (data.is_zombie === true ? 1 : 0);
+    }
 
     return this.prisma.profile.updateMany({
       where: { id, user_id },
@@ -180,6 +219,14 @@ export class ProfilesService {
     return this.prisma.profile.updateMany({
       where: { id, user_id },
       data: { is_archived },
+    });
+  }
+
+  async setZombie(user_id: number, id: number, is_zombie: number | boolean = 1) {
+    const val = typeof is_zombie === 'boolean' ? (is_zombie ? 1 : 0) : Number(is_zombie);
+    return this.prisma.profile.updateMany({
+      where: { id, user_id },
+      data: { is_zombie: val },
     });
   }
 

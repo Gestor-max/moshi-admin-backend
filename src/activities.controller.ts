@@ -26,6 +26,16 @@ export class ActivitiesController {
     return this.activitiesService.logActivity(req.user.user_id, body);
   }
 
+  @Post('gmaps-reviews')
+  async saveGmapsReview(@Body() body: any) {
+    return this.activitiesService.saveGmapsReview(body);
+  }
+
+  @Get('gmaps-reviews')
+  async getGmapsReviews() {
+    return this.activitiesService.getGmapsReviews();
+  }
+
   @Get('log/profile/:profileId')
   async getLogsByProfile(
     @Request() req,

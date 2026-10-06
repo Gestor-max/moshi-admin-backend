@@ -224,4 +224,12 @@ export declare class ActivitiesService {
         activities_created: number;
         message: string;
     }>;
+    saveGmapsReview(data: {
+        place_id?: string;
+        name_place?: string;
+        review?: string;
+        kind?: number;
+        profile_id?: number;
+    }): Promise<any>;
+    getGmapsReviews(limit?: number): Promise<any>;
 }

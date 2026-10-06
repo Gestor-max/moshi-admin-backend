@@ -21,8 +21,8 @@ let ProfilesController = class ProfilesController {
     constructor(profilesService) {
         this.profilesService = profilesService;
     }
-    async findAll(req, search, archived) {
-        return this.profilesService.findAll(req.user.user_id, search, archived);
+    async findAll(req, search, archived, zombie) {
+        return this.profilesService.findAll(req.user.user_id, search, archived, zombie);
     }
     async findOne(req, id) {
         return this.profilesService.findOne(req.user.user_id, parseInt(id));
@@ -37,6 +37,10 @@ let ProfilesController = class ProfilesController {
         const isArchived = body.is_archived !== undefined ? body.is_archived : true;
         return this.profilesService.archive(req.user.user_id, parseInt(id), isArchived);
     }
+    async setZombie(req, id, body) {
+        const isZombie = body.is_zombie !== undefined ? body.is_zombie : 1;
+        return this.profilesService.setZombie(req.user.user_id, parseInt(id), isZombie);
+    }
     async delete(req, id) {
         return this.profilesService.delete(req.user.user_id, parseInt(id));
     }
@@ -47,8 +51,9 @@ __decorate([
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)('search')),
     __param(2, (0, common_1.Query)('archived')),
+    __param(3, (0, common_1.Query)('zombie')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, String]),
+    __metadata("design:paramtypes", [Object, String, String, String]),
     __metadata("design:returntype", Promise)
 ], ProfilesController.prototype, "findAll", null);
 __decorate([
@@ -85,6 +90,15 @@ __decorate([
     __metadata("design:paramtypes", [Object, String, Object]),
     __metadata("design:returntype", Promise)
 ], ProfilesController.prototype, "archive", null);
+__decorate([
+    (0, common_1.Patch)(':id/zombie'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], ProfilesController.prototype, "setZombie", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Request)()),

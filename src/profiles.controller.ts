@@ -23,8 +23,9 @@ export class ProfilesController {
     @Request() req,
     @Query('search') search: string,
     @Query('archived') archived: string,
+    @Query('zombie') zombie: string,
   ) {
-    return this.profilesService.findAll(req.user.user_id, search, archived);
+    return this.profilesService.findAll(req.user.user_id, search, archived, zombie);
   }
 
   @Get(':id')
@@ -54,6 +55,16 @@ export class ProfilesController {
   ) {
     const isArchived = body.is_archived !== undefined ? body.is_archived : true;
     return this.profilesService.archive(req.user.user_id, parseInt(id), isArchived);
+  }
+
+  @Patch(':id/zombie')
+  async setZombie(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() body: { is_zombie?: number | boolean },
+  ) {
+    const isZombie = body.is_zombie !== undefined ? body.is_zombie : 1;
+    return this.profilesService.setZombie(req.user.user_id, parseInt(id), isZombie);
   }
 
   @Delete(':id')

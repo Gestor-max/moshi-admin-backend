@@ -24,6 +24,12 @@ let ActivitiesController = class ActivitiesController {
     async createLog(req, body) {
         return this.activitiesService.logActivity(req.user.user_id, body);
     }
+    async saveGmapsReview(body) {
+        return this.activitiesService.saveGmapsReview(body);
+    }
+    async getGmapsReviews() {
+        return this.activitiesService.getGmapsReviews();
+    }
     async getLogsByProfile(req, profileId) {
         return this.activitiesService.getActivityLogsByProfile(req.user.user_id, profileId);
     }
@@ -67,6 +73,19 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ActivitiesController.prototype, "createLog", null);
+__decorate([
+    (0, common_1.Post)('gmaps-reviews'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "saveGmapsReview", null);
+__decorate([
+    (0, common_1.Get)('gmaps-reviews'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "getGmapsReviews", null);
 __decorate([
     (0, common_1.Get)('log/profile/:profileId'),
     __param(0, (0, common_1.Request)()),

@@ -2,7 +2,7 @@ import { ProfilesService, CreateProfileDto } from './profiles.service';
 export declare class ProfilesController {
     private profilesService;
     constructor(profilesService: ProfilesService);
-    findAll(req: any, search: string, archived: string): Promise<({
+    findAll(req: any, search: string, archived: string, zombie: string): Promise<({
         location: {
             location: string;
             id: number;
@@ -51,6 +51,14 @@ export declare class ProfilesController {
             website_id: number;
             cookie: string;
         })[];
+        _count: {
+            youtube_activities: number;
+            quora_activities: number;
+            medium_activities: number;
+            browser_activities: number;
+            google_activities: number;
+            gmaps_activities: number;
+        };
     } & {
         website: string | null;
         id: number;
@@ -85,6 +93,7 @@ export declare class ProfilesController {
         location_proxy_alt_id: number | null;
         tag_id: number | null;
         is_archived: boolean;
+        is_zombie: number;
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
@@ -140,6 +149,14 @@ export declare class ProfilesController {
             website_id: number;
             cookie: string;
         })[];
+        _count: {
+            youtube_activities: number;
+            quora_activities: number;
+            medium_activities: number;
+            browser_activities: number;
+            google_activities: number;
+            gmaps_activities: number;
+        };
     } & {
         website: string | null;
         id: number;
@@ -174,6 +191,7 @@ export declare class ProfilesController {
         location_proxy_alt_id: number | null;
         tag_id: number | null;
         is_archived: boolean;
+        is_zombie: number;
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
@@ -263,6 +281,7 @@ export declare class ProfilesController {
         location_proxy_alt_id: number | null;
         tag_id: number | null;
         is_archived: boolean;
+        is_zombie: number;
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
@@ -272,6 +291,9 @@ export declare class ProfilesController {
     update(req: any, id: string, body: Partial<CreateProfileDto>): Promise<import(".prisma/client").Prisma.BatchPayload>;
     archive(req: any, id: string, body: {
         is_archived?: boolean;
+    }): Promise<import(".prisma/client").Prisma.BatchPayload>;
+    setZombie(req: any, id: string, body: {
+        is_zombie?: number | boolean;
     }): Promise<import(".prisma/client").Prisma.BatchPayload>;
     delete(req: any, id: string): Promise<import(".prisma/client").Prisma.BatchPayload>;
 }

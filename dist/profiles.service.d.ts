@@ -26,7 +26,7 @@ export declare class ProfilesService {
     private prisma;
     constructor(prisma: PrismaService);
     private stringifyJsonField;
-    findAll(user_id: number, search?: string, archived?: string | boolean): Promise<({
+    findAll(user_id: number, search?: string, archived?: string | boolean, zombie?: string | number | boolean): Promise<({
         location: {
             location: string;
             id: number;
@@ -75,6 +75,14 @@ export declare class ProfilesService {
             website_id: number;
             cookie: string;
         })[];
+        _count: {
+            youtube_activities: number;
+            quora_activities: number;
+            medium_activities: number;
+            browser_activities: number;
+            google_activities: number;
+            gmaps_activities: number;
+        };
     } & {
         website: string | null;
         id: number;
@@ -109,6 +117,7 @@ export declare class ProfilesService {
         location_proxy_alt_id: number | null;
         tag_id: number | null;
         is_archived: boolean;
+        is_zombie: number;
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
@@ -164,6 +173,14 @@ export declare class ProfilesService {
             website_id: number;
             cookie: string;
         })[];
+        _count: {
+            youtube_activities: number;
+            quora_activities: number;
+            medium_activities: number;
+            browser_activities: number;
+            google_activities: number;
+            gmaps_activities: number;
+        };
     } & {
         website: string | null;
         id: number;
@@ -198,6 +215,7 @@ export declare class ProfilesService {
         location_proxy_alt_id: number | null;
         tag_id: number | null;
         is_archived: boolean;
+        is_zombie: number;
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
@@ -287,6 +305,7 @@ export declare class ProfilesService {
         location_proxy_alt_id: number | null;
         tag_id: number | null;
         is_archived: boolean;
+        is_zombie: number;
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
@@ -295,5 +314,6 @@ export declare class ProfilesService {
     }>;
     update(user_id: number, id: number, data: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
     archive(user_id: number, id: number, is_archived?: boolean): Promise<import(".prisma/client").Prisma.BatchPayload>;
+    setZombie(user_id: number, id: number, is_zombie?: number | boolean): Promise<import(".prisma/client").Prisma.BatchPayload>;
     delete(user_id: number, id: number): Promise<import(".prisma/client").Prisma.BatchPayload>;
 }

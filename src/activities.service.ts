@@ -528,6 +528,27 @@ export class ActivitiesService {
       message: `Se crearon ${totalCreated} actividades exitosamente para ${profiles.length} perfiles.`,
     };
   }
+
+  async saveGmapsReview(data: { place_id?: string; name_place?: string; review?: string; kind?: number; profile_id?: number }) {
+    return (this.prisma as any).gmapsReview.create({
+      data: {
+        place_id: data.place_id || '',
+        name_place: data.name_place || '',
+        review: data.review || '',
+        kind: data.kind !== undefined ? Number(data.kind) : 1,
+        profile_id: data.profile_id ? Number(data.profile_id) : null,
+      },
+    });
+  }
+
+  async getGmapsReviews(limit = 100) {
+    return (this.prisma as any).gmapsReview.findMany({
+      take: limit,
+      orderBy: { id: 'desc' },
+      include: { profile: true },
+    });
+  }
 }
+
 
 

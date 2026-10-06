@@ -522,6 +522,24 @@ let ActivitiesService = class ActivitiesService {
             message: `Se crearon ${totalCreated} actividades exitosamente para ${profiles.length} perfiles.`,
         };
     }
+    async saveGmapsReview(data) {
+        return this.prisma.gmapsReview.create({
+            data: {
+                place_id: data.place_id || '',
+                name_place: data.name_place || '',
+                review: data.review || '',
+                kind: data.kind !== undefined ? Number(data.kind) : 1,
+                profile_id: data.profile_id ? Number(data.profile_id) : null,
+            },
+        });
+    }
+    async getGmapsReviews(limit = 100) {
+        return this.prisma.gmapsReview.findMany({
+            take: limit,
+            orderBy: { id: 'desc' },
+            include: { profile: true },
+        });
+    }
 };
 exports.ActivitiesService = ActivitiesService;
 exports.ActivitiesService = ActivitiesService = __decorate([

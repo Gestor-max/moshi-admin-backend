@@ -29,7 +29,7 @@ let ProfilesService = class ProfilesService {
             return '';
         }
     }
-    async findAll(user_id, search, archived) {
+    async findAll(user_id, search, archived, zombie) {
         const hasSearch = search && search.trim().length > 0;
         let isArchivedCondition = false;
         if (archived === 'all') {
@@ -38,10 +38,27 @@ let ProfilesService = class ProfilesService {
         else if (archived === 'true' || archived === true) {
             isArchivedCondition = true;
         }
+        let isZombieCondition = 0;
+        if (zombie === 'all') {
+            isZombieCondition = undefined;
+        }
+        else if (zombie === 'true' || zombie === true || zombie === '1' || zombie === 1) {
+            isZombieCondition = 1;
+            if (archived === undefined) {
+                isArchivedCondition = undefined;
+            }
+        }
+        else if (zombie === 'false' || zombie === false || zombie === '0' || zombie === 0) {
+            isZombieCondition = 0;
+        }
+        else if (archived === 'true' || archived === true) {
+            isZombieCondition = undefined;
+        }
         return this.prisma.profile.findMany({
             where: {
                 user_id,
                 is_archived: isArchivedCondition,
+                is_zombie: isZombieCondition,
                 OR: hasSearch
                     ? [
                         { name: { contains: search, mode: 'insensitive' } },
@@ -63,6 +80,16 @@ let ProfilesService = class ProfilesService {
                         website: true,
                     },
                 },
+                _count: {
+                    select: {
+                        google_activities: true,
+                        youtube_activities: true,
+                        gmaps_activities: true,
+                        browser_activities: true,
+                        quora_activities: true,
+                        medium_activities: true,
+                    },
+                },
             },
             orderBy: { id: 'asc' },
         });
@@ -79,6 +106,16 @@ let ProfilesService = class ProfilesService {
                 profile_websites: {
                     include: {
                         website: true,
+                    },
+                },
+                _count: {
+                    select: {
+                        google_activities: true,
+                        youtube_activities: true,
+                        gmaps_activities: true,
+                        browser_activities: true,
+                        quora_activities: true,
+                        medium_activities: true,
                     },
                 },
             },
@@ -153,6 +190,9 @@ let ProfilesService = class ProfilesService {
         if (data.is_archived !== undefined) {
             updateData.is_archived = Boolean(data.is_archived);
         }
+        if (data.is_zombie !== undefined) {
+            updateData.is_zombie = Number(data.is_zombie) || (data.is_zombie === true ? 1 : 0);
+        }
         return this.prisma.profile.updateMany({
             where: { id, user_id },
             data: updateData,
@@ -162,6 +202,13 @@ let ProfilesService = class ProfilesService {
         return this.prisma.profile.updateMany({
             where: { id, user_id },
             data: { is_archived },
+        });
+    }
+    async setZombie(user_id, id, is_zombie = 1) {
+        const val = typeof is_zombie === 'boolean' ? (is_zombie ? 1 : 0) : Number(is_zombie);
+        return this.prisma.profile.updateMany({
+            where: { id, user_id },
+            data: { is_zombie: val },
         });
     }
     async delete(user_id, id) {

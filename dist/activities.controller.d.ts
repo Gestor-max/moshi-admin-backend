@@ -12,6 +12,8 @@ export declare class ActivitiesController {
         platform: string | null;
         message: string | null;
     }>;
+    saveGmapsReview(body: any): Promise<any>;
+    getGmapsReviews(): Promise<any>;
     getLogsByProfile(req: any, profileId: number): Promise<{
         id: number;
         status: string;

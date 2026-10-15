@@ -3,8 +3,8 @@ import { AppService } from './app.service';
 import { AuthGuard } from '@nestjs/passport';
 import { PrismaService } from './prisma.service';
 
-@Controller()
-export class AppController {
+@Controller('auth')
+export class AuthController {
   constructor(
     private readonly appService: AppService,
     private prisma: PrismaService,

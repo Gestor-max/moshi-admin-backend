@@ -65,6 +65,7 @@ export class ActivitiesService {
         return this.prisma.youtubeActivity.create({
           data: {
             profile_id: profileId,
+            kind: body.kind !== undefined ? Number(body.kind) : 1,
             search_query: body.search_query || '',
             video_id: body.video_id || '',
             comment_video_id: body.comment_video_id || '',
@@ -79,6 +80,7 @@ export class ActivitiesService {
         return this.prisma.quoraActivity.create({
           data: {
             profile_id: profileId,
+            kind: body.kind !== undefined ? Number(body.kind) : 1,
             search_query: body.search_query || '',
             question_id: body.question_id || '',
             answer_id: body.answer_id || '',
@@ -96,6 +98,7 @@ export class ActivitiesService {
         return this.prisma.mediumActivity.create({
           data: {
             profile_id: profileId,
+            kind: body.kind !== undefined ? Number(body.kind) : 1,
             search_query: body.search_query || '',
             post_id: body.post_id || '',
             claps_post_id: body.claps_post_id || '',
@@ -137,6 +140,7 @@ export class ActivitiesService {
             navigate_location: body.navigate_location || '',
             review_text: body.review_text || '',
             rating: body.rating !== undefined ? Number(body.rating) : 5,
+            kind: body.kind !== undefined ? Number(body.kind) : 1,
             status,
             publish_date,
             publish_time,
@@ -195,6 +199,7 @@ export class ActivitiesService {
       if (body.video_id !== undefined) updateData.video_id = body.video_id;
       if (body.comment_video_id !== undefined) updateData.comment_video_id = body.comment_video_id;
       if (body.likes_video_id !== undefined) updateData.likes_video_id = body.likes_video_id;
+      if (body.kind !== undefined) updateData.kind = Number(body.kind);
       return this.prisma.youtubeActivity.update({ where: { id }, data: updateData });
     } else if (plat === 'quora') {
       if (body.question_id !== undefined) updateData.question_id = body.question_id;
@@ -203,11 +208,13 @@ export class ActivitiesService {
       if (body.upvote_answer_id !== undefined) updateData.upvote_answer_id = body.upvote_answer_id;
       if (body.comment_question_id !== undefined) updateData.comment_question_id = body.comment_question_id;
       if (body.comment_answer_id !== undefined) updateData.comment_answer_id = body.comment_answer_id;
+      if (body.kind !== undefined) updateData.kind = Number(body.kind);
       return this.prisma.quoraActivity.update({ where: { id }, data: updateData });
     } else if (plat === 'medium') {
       if (body.post_id !== undefined) updateData.post_id = body.post_id;
       if (body.claps_post_id !== undefined) updateData.claps_post_id = body.claps_post_id;
       if (body.comment_post_id !== undefined) updateData.comment_post_id = body.comment_post_id;
+      if (body.kind !== undefined) updateData.kind = Number(body.kind);
       return this.prisma.mediumActivity.update({ where: { id }, data: updateData });
     } else if (plat === 'browser') {
       if (body.link !== undefined) updateData.link = body.link;
@@ -219,6 +226,7 @@ export class ActivitiesService {
       if (body.navigate_location !== undefined) updateData.navigate_location = body.navigate_location;
       if (body.review_text !== undefined) updateData.review_text = body.review_text;
       if (body.rating !== undefined) updateData.rating = Number(body.rating);
+      if (body.kind !== undefined) updateData.kind = Number(body.kind);
       return this.prisma.gmapsActivity.update({ where: { id }, data: updateData });
     }
   }
@@ -472,6 +480,7 @@ export class ActivitiesService {
               data: {
                 profile_id: prof.id,
                 search_query: entry,
+                kind: 1,
                 status: 0,
                 publish_date,
                 publish_time,
@@ -484,6 +493,7 @@ export class ActivitiesService {
               data: {
                 profile_id: prof.id,
                 video_id: entry,
+                kind: 1,
                 status: 0,
                 publish_date,
                 publish_time,
@@ -496,6 +506,7 @@ export class ActivitiesService {
               data: {
                 profile_id: prof.id,
                 search_query: entry,
+                kind: 1,
                 status: 0,
                 publish_date,
                 publish_time,
@@ -508,6 +519,20 @@ export class ActivitiesService {
               data: {
                 profile_id: prof.id,
                 place_id: entry,
+                kind: 2,
+                status: 0,
+                publish_date,
+                publish_time,
+              },
+            });
+            totalCreated++;
+            break;
+          case 'gmaps_photo':
+            await this.prisma.gmapsActivity.create({
+              data: {
+                profile_id: prof.id,
+                place_id: entry,
+                kind: 5,
                 status: 0,
                 publish_date,
                 publish_time,

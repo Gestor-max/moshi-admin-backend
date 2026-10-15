@@ -65,6 +65,7 @@ let ProfilesService = class ProfilesService {
                         { lastname: { contains: search, mode: 'insensitive' } },
                         { gmail: { contains: search, mode: 'insensitive' } },
                         { email_recovery: { contains: search, mode: 'insensitive' } },
+                        { email_recovery_prev: { contains: search, mode: 'insensitive' } },
                         { profile_email: { contains: search, mode: 'insensitive' } },
                     ]
                     : undefined,
@@ -188,10 +189,20 @@ let ProfilesService = class ProfilesService {
             updateData.tag_id = data.tag_id ? Number(data.tag_id) : null;
         }
         if (data.is_archived !== undefined) {
-            updateData.is_archived = Boolean(data.is_archived);
+            const boolArchived = Boolean(data.is_archived);
+            updateData.is_archived = boolArchived;
+            updateData.archived_at = boolArchived ? new Date() : null;
+            await this.prisma.profileStatus.create({
+                data: { profile_id: id, kind: boolArchived ? 1 : 3 },
+            });
         }
         if (data.is_zombie !== undefined) {
-            updateData.is_zombie = Number(data.is_zombie) || (data.is_zombie === true ? 1 : 0);
+            const zombieVal = Number(data.is_zombie) || (data.is_zombie === true ? 1 : 0);
+            updateData.is_zombie = zombieVal;
+            updateData.zombie_at = zombieVal === 1 ? new Date() : null;
+            await this.prisma.profileStatus.create({
+                data: { profile_id: id, kind: zombieVal === 1 ? 2 : 4 },
+            });
         }
         return this.prisma.profile.updateMany({
             where: { id, user_id },
@@ -199,16 +210,26 @@ let ProfilesService = class ProfilesService {
         });
     }
     async archive(user_id, id, is_archived = true) {
+        const archived_at = is_archived ? new Date() : null;
+        const kind = is_archived ? 1 : 3;
+        await this.prisma.profileStatus.create({
+            data: { profile_id: id, kind },
+        });
         return this.prisma.profile.updateMany({
             where: { id, user_id },
-            data: { is_archived },
+            data: { is_archived, archived_at },
         });
     }
     async setZombie(user_id, id, is_zombie = 1) {
         const val = typeof is_zombie === 'boolean' ? (is_zombie ? 1 : 0) : Number(is_zombie);
+        const zombie_at = val === 1 ? new Date() : null;
+        const kind = val === 1 ? 2 : 4;
+        await this.prisma.profileStatus.create({
+            data: { profile_id: id, kind },
+        });
         return this.prisma.profile.updateMany({
             where: { id, user_id },
-            data: { is_zombie: val },
+            data: { is_zombie: val, zombie_at },
         });
     }
     async delete(user_id, id) {

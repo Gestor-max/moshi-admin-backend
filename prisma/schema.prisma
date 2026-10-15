@@ -61,7 +61,9 @@ model Profile {
   lastname               String
   gmail                  String?          @default("")
   gmail_password         String?          @default("")
+  gmail_password_prev    String?          @default("")
   email_recovery         String?          @default("")
+  email_recovery_prev    String?          @default("")
   profile_email          String?          @default("")
   profile_email_password String?          @default("")
   bio                    String?          @default("")
@@ -89,10 +91,13 @@ model Profile {
   status                 Int              @default(1)
   is_archived            Boolean          @default(false)
   is_zombie              Int              @default(0)
+  zombie_at              DateTime?
+  archived_at            DateTime?
   empleo                 String?          @default("")
   educacion              String?          @default("")
   ubicacion              String?          @default("")
   two_fa                 String?          @default("")
+  two_fa_prev            String?          @default("")
   telefono               String?          @default("")
   user                   User             @relation(fields: [user_id], references: [id])
   proxy                  Proxy?           @relation(fields: [proxy_id], references: [id])
@@ -101,6 +106,7 @@ model Profile {
   location_proxy_alt     Location?        @relation("ProfileProxyAltLocation", fields: [location_proxy_alt_id], references: [id])
   tag                    Tag?             @relation(fields: [tag_id], references: [id])
   profile_websites       ProfileWebsite[]
+  profile_statuses       ProfileStatus[]
   youtube_activities     YoutubeActivity[]
   quora_activities       QuoraActivity[]
   medium_activities      MediumActivity[]
@@ -111,6 +117,16 @@ model Profile {
   gmaps_reviews          GmapsReview[]
 
   @@map("profile")
+}
+
+model ProfileStatus {
+  id         Int      @id @default(autoincrement())
+  profile_id Int
+  kind       Int
+  created_at DateTime @default(now())
+  profile    Profile  @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+
+  @@map("profile_status")
 }
 
 model Website {
@@ -150,6 +166,7 @@ model Automation {
 model YoutubeActivity {
   id               Int       @id @default(autoincrement())
   profile_id       Int
+  kind             Int       @default(1)
   search_query     String?   @default("")
   video_id         String?   @default("")
   comment_video_id String?   @default("")
@@ -167,6 +184,7 @@ model YoutubeActivity {
 model QuoraActivity {
   id                  Int       @id @default(autoincrement())
   profile_id          Int
+  kind                Int       @default(1)
   search_query        String?   @default("")
   question_id         String?   @default("")
   answer_id           String?   @default("")
@@ -187,6 +205,7 @@ model QuoraActivity {
 model MediumActivity {
   id              Int       @id @default(autoincrement())
   profile_id      Int
+  kind            Int       @default(1)
   search_query    String?   @default("")
   post_id         String?   @default("")
   claps_post_id   String?   @default("")
@@ -237,6 +256,7 @@ model GmapsActivity {
   navigate_location String?   @default("")
   review_text       String?   @default("")
   rating            Int?      @default(5)
+  kind              Int       @default(1)
   status            Int       @default(0)
   publish_date      String?   @default("")
   publish_time      String?   @default("")

@@ -8,6 +8,7 @@ export declare class ActivitiesService {
             id: number;
             status: number;
             profile_id: number;
+            kind: number;
             search_query: string | null;
             video_id: string | null;
             comment_video_id: string | null;
@@ -21,6 +22,7 @@ export declare class ActivitiesService {
             id: number;
             status: number;
             profile_id: number;
+            kind: number;
             search_query: string | null;
             publish_date: string | null;
             publish_time: string | null;
@@ -37,6 +39,7 @@ export declare class ActivitiesService {
             id: number;
             status: number;
             profile_id: number;
+            kind: number;
             search_query: string | null;
             publish_date: string | null;
             publish_time: string | null;
@@ -70,6 +73,7 @@ export declare class ActivitiesService {
             id: number;
             status: number;
             profile_id: number;
+            kind: number;
             search_query: string | null;
             publish_date: string | null;
             publish_time: string | null;

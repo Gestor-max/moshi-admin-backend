@@ -4,7 +4,9 @@ export interface CreateProfileDto {
     lastname: string;
     gmail?: string;
     gmail_password?: string;
+    gmail_password_prev?: string;
     email_recovery?: string;
+    email_recovery_prev?: string;
     profile_email?: string;
     profile_email_password?: string;
     bio?: string;
@@ -20,6 +22,7 @@ export interface CreateProfileDto {
     educacion?: string | object;
     ubicacion?: string | object;
     two_fa?: string;
+    two_fa_prev?: string;
     telefono?: string;
 }
 export declare class ProfilesService {
@@ -92,7 +95,9 @@ export declare class ProfilesService {
         lastname: string;
         gmail: string | null;
         gmail_password: string | null;
+        gmail_password_prev: string | null;
         email_recovery: string | null;
+        email_recovery_prev: string | null;
         profile_email: string | null;
         profile_email_password: string | null;
         bio: string | null;
@@ -118,10 +123,13 @@ export declare class ProfilesService {
         tag_id: number | null;
         is_archived: boolean;
         is_zombie: number;
+        zombie_at: Date | null;
+        archived_at: Date | null;
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
         two_fa: string | null;
+        two_fa_prev: string | null;
         telefono: string | null;
     })[]>;
     findOne(user_id: number, id: number): Promise<({
@@ -190,7 +198,9 @@ export declare class ProfilesService {
         lastname: string;
         gmail: string | null;
         gmail_password: string | null;
+        gmail_password_prev: string | null;
         email_recovery: string | null;
+        email_recovery_prev: string | null;
         profile_email: string | null;
         profile_email_password: string | null;
         bio: string | null;
@@ -216,10 +226,13 @@ export declare class ProfilesService {
         tag_id: number | null;
         is_archived: boolean;
         is_zombie: number;
+        zombie_at: Date | null;
+        archived_at: Date | null;
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
         two_fa: string | null;
+        two_fa_prev: string | null;
         telefono: string | null;
     }) | null>;
     create(user_id: number, data: any): Promise<{
@@ -280,7 +293,9 @@ export declare class ProfilesService {
         lastname: string;
         gmail: string | null;
         gmail_password: string | null;
+        gmail_password_prev: string | null;
         email_recovery: string | null;
+        email_recovery_prev: string | null;
         profile_email: string | null;
         profile_email_password: string | null;
         bio: string | null;
@@ -306,10 +321,13 @@ export declare class ProfilesService {
         tag_id: number | null;
         is_archived: boolean;
         is_zombie: number;
+        zombie_at: Date | null;
+        archived_at: Date | null;
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
         two_fa: string | null;
+        two_fa_prev: string | null;
         telefono: string | null;
     }>;
     update(user_id: number, id: number, data: any): Promise<import(".prisma/client").Prisma.BatchPayload>;

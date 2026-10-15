@@ -68,7 +68,9 @@ export declare class ProfilesController {
         lastname: string;
         gmail: string | null;
         gmail_password: string | null;
+        gmail_password_prev: string | null;
         email_recovery: string | null;
+        email_recovery_prev: string | null;
         profile_email: string | null;
         profile_email_password: string | null;
         bio: string | null;
@@ -94,10 +96,13 @@ export declare class ProfilesController {
         tag_id: number | null;
         is_archived: boolean;
         is_zombie: number;
+        zombie_at: Date | null;
+        archived_at: Date | null;
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
         two_fa: string | null;
+        two_fa_prev: string | null;
         telefono: string | null;
     })[]>;
     findOne(req: any, id: string): Promise<({
@@ -166,7 +171,9 @@ export declare class ProfilesController {
         lastname: string;
         gmail: string | null;
         gmail_password: string | null;
+        gmail_password_prev: string | null;
         email_recovery: string | null;
+        email_recovery_prev: string | null;
         profile_email: string | null;
         profile_email_password: string | null;
         bio: string | null;
@@ -192,10 +199,13 @@ export declare class ProfilesController {
         tag_id: number | null;
         is_archived: boolean;
         is_zombie: number;
+        zombie_at: Date | null;
+        archived_at: Date | null;
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
         two_fa: string | null;
+        two_fa_prev: string | null;
         telefono: string | null;
     }) | null>;
     create(req: any, body: CreateProfileDto): Promise<{
@@ -256,7 +266,9 @@ export declare class ProfilesController {
         lastname: string;
         gmail: string | null;
         gmail_password: string | null;
+        gmail_password_prev: string | null;
         email_recovery: string | null;
+        email_recovery_prev: string | null;
         profile_email: string | null;
         profile_email_password: string | null;
         bio: string | null;
@@ -282,10 +294,13 @@ export declare class ProfilesController {
         tag_id: number | null;
         is_archived: boolean;
         is_zombie: number;
+        zombie_at: Date | null;
+        archived_at: Date | null;
         empleo: string | null;
         educacion: string | null;
         ubicacion: string | null;
         two_fa: string | null;
+        two_fa_prev: string | null;
         telefono: string | null;
     }>;
     update(req: any, id: string, body: Partial<CreateProfileDto>): Promise<import(".prisma/client").Prisma.BatchPayload>;
